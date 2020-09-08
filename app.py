@@ -1,7 +1,6 @@
 from selenium import webdriver
 import time
 
-
 class GrepolisBot:
     def __init__(self, login, password):
         self.bot = webdriver.Firefox()
@@ -125,6 +124,7 @@ class GrepolisBot:
                     if one_citie_in_one_island == "1":
                         if lock_loop == False:
                             bot.find_element_by_id("quickbar_dropdown0").click()
+                            time.sleep(3)
                             cities_query = bot.find_elements_by_class_name("fto_town")
                             cities_checkbox = bot.find_elements_by_class_name("town_checkbox")
                             # adding cities to dictionary
