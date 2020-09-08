@@ -97,50 +97,6 @@ class GrepolisBot:
                 bot.find_element_by_xpath('//*[@id="fto_claim_button"]').click()
                 time.sleep(time_sleep)
 
-    def more_cities_same_island(self):
-        bot = self.bot
-        lock_loop = False
-        continue_choosing = True
-        key_citie = 0
-        key_checkbox = 0
-        cities_list = {}
-        cities_checkbox_list = {}
-        cities_choosed_list = []
-        
-        if lock_loop == False:
-            bot.find_element_by_id("quickbar_dropdown0").click()
-            cities_query = bot.find_elements_by_class_name("fto_town")
-            cities_checkbox = bot.find_elements_by_class_name("town_checkbox")
-            # adding cities to dictionary
-            for item in cities_query:
-                citie = item.find_element_by_class_name("gp_town_link").text
-                key_citie += 1
-                cities_list[key_citie] = citie
-            # adding cities checkboxes to the list
-            for checkbox in cities_checkbox:
-                key_checkbox += 1
-                cities_checkbox_list[key_checkbox] = checkbox
-            print("Wybierz numer miasta do zbiorow z listy (pamietaj tylko 1 miasto na wyspe!!!): \n",
-                cities_list,'\nJesli nie chcesz podac wiecej miast wpisz: "0"',
-            )
-            while continue_choosing == True:
-                cities_choosed = int(input())
-                if cities_choosed != 0:
-                    cities_choosed_list.append(cities_choosed)
-                elif cities_choosed == 0:
-                    continue_choosing = False
-            cities_choosed_list = list(set(cities_choosed_list))
-            lock_loop = True
-        # get a list of selected user's cities and select them in the panel
-        time.sleep(1)
-        for key in cities_choosed_list:
-            cities_checkbox_list[key].click()
-            time.sleep(1)
-        bot.find_element_by_xpath('//*[@id="fto_claim_button"]').click()
-        time.sleep(1)
-        bot.find_element_by_class_name("btn_confirm").click()
-        time.sleep(time_sleep)
-
     def more_cities_different_island(self):
         bot = self.bot
         bot.find_element_by_id("quickbar_dropdown0").click()
@@ -153,12 +109,53 @@ class GrepolisBot:
         time.sleep(time_sleep)
 
     def village_clicker(self):
+        bot = self.bot
+        lock_loop = False
+        continue_choosing = True
+        key_citie = 0
+        key_checkbox = 0
         attempt = 0
+        cities_list = {}
+        cities_checkbox_list = {}
+        cities_choosed_list = []
+
         while attempt != 5:
             try:
                 if villages == "1":
                     if one_citie_in_one_island == "1":
-                        data.more_cities_same_island()
+                        if lock_loop == False:
+                            bot.find_element_by_id("quickbar_dropdown0").click()
+                            cities_query = bot.find_elements_by_class_name("fto_town")
+                            cities_checkbox = bot.find_elements_by_class_name("town_checkbox")
+                            # adding cities to dictionary
+                            for item in cities_query:
+                                citie = item.find_element_by_class_name("gp_town_link").text
+                                key_citie += 1
+                                cities_list[key_citie] = citie
+                            # adding cities checkboxes to the list
+                            for checkbox in cities_checkbox:
+                                key_checkbox += 1
+                                cities_checkbox_list[key_checkbox] = checkbox
+                            print("Wybierz numer miasta do zbiorow z listy (pamietaj tylko 1 miasto na wyspe!!!): \n",
+                                cities_list,'\nJesli nie chcesz podac wiecej miast wpisz: "0"',
+                            )
+                            while continue_choosing == True:
+                                cities_choosed = int(input())
+                                if cities_choosed != 0:
+                                    cities_choosed_list.append(cities_choosed)
+                                elif cities_choosed == 0:
+                                    continue_choosing = False
+                            cities_choosed_list = list(set(cities_choosed_list))
+                            lock_loop = True
+                        # get a list of selected user's cities and select them in the panel
+                        time.sleep(1)
+                        for key in cities_choosed_list:
+                            cities_checkbox_list[key].click()
+                            time.sleep(1)
+                        bot.find_element_by_xpath('//*[@id="fto_claim_button"]').click()
+                        time.sleep(1)
+                        bot.find_element_by_class_name("btn_confirm").click()
+                        time.sleep(time_sleep)
                     elif one_citie_in_one_island == "2":
                         data.more_cities_different_island()
                 elif villages == "2":
